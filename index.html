@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;," />
+    <title>NEBree8 - Random Drink</title>
+    <script type="text/javascript" src="index.js"></script>
+    <script type="module">
+      import { createApp } from 'https://unpkg.com/petite-vue?module';
+
+      createApp({
+        drink: null,
+
+        generateDrink() {
+          this.drink = getDrink();
+          console.log(this.drink);
+        },
+
+        formatParts(parts) {
+          return this.round(parts) + ' part' + (parts == 1 ? '' : 's');
+        },
+        formatDrops(drops) {
+          return this.round(drops) + ' drop' + (drops == 1 ? '' : 's');
+        },
+        capitalize(name) {
+          const words = name
+            .split(' ')
+            .map((word) => word[0].toUpperCase() + word.slice(1));
+          console.log(words);
+          return words.join(' ');
+        },
+        round(num) {
+          return Math.round((num + Number.EPSILON) * 1000) / 1000;
+        },
+      }).mount();
+    </script>
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+      body {
+        font-family: sans-serif;
+        margin: 2rem;
+      }
+      .container {
+        max-width: 768px;
+      }
+      .drink {
+        margin-top: 1rem;
+      }
+      .intro {
+        font-size: 1.25rem;
+      }
+      .parts {
+        color: green;
+      }
+      .drops {
+        color: coral;
+      }
+      .parts,
+      .drops {
+        display: inline-block;
+        min-width: 10rem;
+        text-align: right;
+      }
+      .ingredient {
+        font-weight: bold;
+      }
+      .element {
+        font-size: 2rem;
+        margin-top: 0.5rem;
+      }
+      .name {
+        font-size: 2rem;
+        margin-top: 1rem;
+      }
+      .drink_name {
+        font-style: italic;
+      }
+      button {
+        box-shadow: inset 0px 1px 0px 0px #97c4fe;
+        background: linear-gradient(to bottom, #3d94f6 5%, #1e62d0 100%);
+        background-color: #3d94f6;
+        border-radius: 6px;
+        border: 1px solid #337fed;
+        display: inline-block;
+        cursor: pointer;
+        color: #ffffff;
+        font-family: Arial;
+        font-size: 2.5rem;
+        font-weight: bold;
+        padding: 6px 24px;
+        text-decoration: none;
+        text-shadow: 0px 1px 0px #1570cd;
+      }
+      button:hover {
+        background: linear-gradient(to bottom, #1e62d0 5%, #3d94f6 100%);
+        background-color: #1e62d0;
+      }
+      button:active {
+        position: relative;
+        top: 1px;
+      }
+    </style>
+  </head>
+  <body v-scope v-cloak>
+    <div class="container">
+      <p class="intro">
+        One of the many marvelous functions of NEBree8 was its ability to
+        generate and serve a random cocktail. Although it was guided by the
+        expert mixologists that created it, these drinks were still only for
+        those with the bravest tastebuds. Though NEBree8 has been retired, you
+        can still explore a simulated version of the random drinks it might
+        create.
+      </p>
+      <button @click="generateDrink">Generate random cocktail</button>
+      <div v-if="drink" class="drink">
+        <div v-for="ing in drink.ingredients" class="element">
+          <span class="parts" v-if="ing.parts"
+            >{{ formatParts(ing.parts)}}</span
+          >
+          <span class="drops" v-if="ing.drops"
+            >{{ formatDrops(ing.drops)}}</span
+          >
+          <span class="ingredient">{{ capitalize(ing.name) }}</span>
+        </div>
+        <div class="name">
+          <div>I call it:</div>
+          <div class="drink_name">{{ drink.drink_name }}</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
